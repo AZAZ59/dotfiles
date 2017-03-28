@@ -1,0 +1,162 @@
+out_to_x no
+own_window no
+out_to_console yes
+background no
+max_text_width 0
+no_buffers yes
+ 
+# Update interval in seconds
+update_interval 0.1
+ 
+# This is the number of times Conky will update before quitting.
+# Set to zero to run forever.
+#total_run_times 0
+ 
+# Shortens units to a single character (kiB->k, GiB->G, etc.). Default is off.
+short_units yes
+ 
+# How strict should if_up be when testing an interface for being up?
+# The value is one of up, link or address, to check for the interface
+# being solely up, being up and having link or being up, having link
+# and an assigned IP address. 
+if_up_strictness route
+ 
+# Add spaces to keep things from moving about?  This only affects certain objects.
+# use_spacer should have an argument of left, right, or none
+use_spacer none
+ 
+# Force UTF8? note that UTF8 support required XFT
+override_utf8_locale no
+ 
+# number of cpu samples to average
+# set to 1 to disable averaging
+cpu_avg_samples 2
+
+pad_percent 1
+ 
+# Stuff after 'TEXT' will be formatted on screen
+TEXT
+# JSON for i3bar
+[
+#${if_match ${battery_percent BAT1} <= 10 }
+#{
+#    "full_text": "Plug In Charger!!!",
+#    "urgent": true,
+#    "color": "\#FF0000"
+#},
+#${endif}
+#${if_match ${battery_percent BAT1} > 10 }
+#{
+#    "full_text": "${battery_percent BAT1}%"
+#},
+#${endif}
+${if_match "${exec xset q | grep 'Caps Lock' | sed 's/.*Caps Lock:[ ]*\([^ ]*\).*/\1/'}"=="on"}
+{
+    "full_text": "CapsLock",
+    "color": "\#00FF00"
+},
+${endif}{
+    "full_text": "${exec curl icanhazip.com} "
+},
+
+${if_up ham0}{
+   "full_text": "${addr ham0} "
+},
+${endif}
+
+${if_up eth0}
+{
+    "full_text": "${addr eth0} "
+},
+${endif}
+${if_up wlp9s0}
+{
+    "full_text": "${addr wlp9s0} "
+},
+${endif}
+{
+    "full_text": " D: ${downspeed wlp9s0}/s U: ${upspeed wlp9s0}/s T: ${totaldown wlp9s0}"
+},
+{
+     "full_text": " CPU: ${cpu cpu0}% ",
+     "color": ${if_match ${cpu cpu0}>90}"\#FF0000"${else}${if_match ${cpu cpu0}<10}"\#00CC00"${else}"\#ffffff"${endif}${endif}
+},
+{
+    "full_text": "/ ${fs_free} (${fs_free_perc /}%) ",
+    ${if_match ${fs_free_perc /}>=30}
+        "color": "\#cccccc"
+    ${endif}
+    ${if_match ${fs_free_perc /}<30}
+        ${if_match ${fs_free_perc /}>=20}
+            "color": "\#ffff99"  # yellow
+        ${endif}
+    ${endif}
+    ${if_match ${fs_free_perc /}<20}
+        ${if_match ${fs_free_perc /}>=10}
+            "color": "\#ff9933"  # orange
+        ${endif}
+    ${endif}
+    ${if_match ${fs_free_perc /}<10}
+        "color": "\#ff0000",  # red
+    ${endif}
+},
+{
+    "full_text": "/home ${fs_free /home} (${fs_free_perc /home}%) ",\
+${if_match ${fs_free_perc /home}>=30}\
+    # green
+    "color": "\#cccccc"\
+${endif}\
+${if_match ${fs_free_perc /home}<30}\
+    ${if_match ${fs_free_perc /home}>=20}\
+        # yellow
+        "color": "\#ffff99"\
+    ${endif}\
+${endif}\
+${if_match ${fs_free_perc /home}<20}\
+    ${if_match ${fs_free_perc /home}>=10}\
+        # orange
+        "color": "\#ff9933"\
+    ${endif}\
+${endif}\
+${if_match ${fs_free_perc /home}<10}
+    # red
+    "color": "\#ff0000"
+${endif}
+},
+{
+    "full_text": "free_mem ${memperc}% ",
+${if_match ${memperc}>=80}\
+    "color": "\#ff0000"
+${endif}\
+${if_match ${memperc}<80}\
+    ${if_match ${memperc}>=70}\
+        # orange
+        "color": "\#ff9933"\
+    ${endif}\
+${endif}\
+${if_match ${memperc}<70}\
+    ${if_match ${memperc}>=60}\
+        # yellow
+        "color": "\#ffff99"\
+    ${endif}\
+${endif}\
+${if_match ${memperc}<60}
+    # green
+    "color": "\#cccccc"\
+${endif}
+},
+#{
+#    "full_text": "${exec sensors | grep 'Physical id 0:' | awk '{print $4}'} "
+#},
+{
+    "full_text": " ${uptime_short} ",
+    "min_width": "59m59s"
+},
+{
+    "full_text": " ♪ ${exec ~/.i3/conky/volumelevel.sh}% ",
+    "color": ${if_empty ${exec ~/.i3/conky/volumelevel.sh | grep 'Mute'}}"\#cccccc"${else}"\#ffff00"${endif}
+},
+{
+    "full_text": "${time %a %d/%m/%y} - ${time %H:%M:%S}"
+}
+],

@@ -1,0 +1,35 @@
+config:
+  backup: true
+  create: true
+  dotpath: /home/azaz/dotfiles/dotfiles
+dotfiles:
+  d_oh-my-zsh:
+    dst: ~/.oh-my-zsh
+    src: oh-my-zsh
+  f_conky-i3bar.sh:
+    dst: ~/bin/conky-i3bar.sh
+    src: bin/conky-i3bar.sh
+  f_conkyrc:
+    dst: ~/.conkyrc
+    src: conkyrc
+  f_i3_config:
+    dst: ~/.config/i3/config
+    src: config/i3/config
+  f_i3status_config:
+    dst: ~/.config/i3status/config
+    src: config/i3status/config
+  f_tmux.conf:
+    dst: ~/.tmux.conf
+    src: tmux.conf
+  f_zshrc:
+    dst: ~/.zshrc
+    src: zshrc
+profiles:
+  localhost.AZAZ-Toshiba:
+  - f_tmux.conf
+  - f_i3_config
+  - f_i3status_config
+  - f_conkyrc
+  - f_conky-i3bar.sh
+  - d_oh-my-zsh
+  - f_zshrc
